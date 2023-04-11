@@ -22,6 +22,8 @@ def detect_l(hand_landmarks):
         return True
     return False
 
+
+
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 
@@ -43,6 +45,14 @@ with mp_hands.Hands(static_image_mode=False, min_detection_confidence=0.3, min_t
                 mp_drawing.draw_landmarks(image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
 
                 if detect_l(hand_landmarks):
+                    index_finger_tip = hand_landmarks.landmark[mp.solutions.hands.HandLandmark.INDEX_FINGER_TIP]
+                    thumb_tip = hand_landmarks.landmark[mp.solutions.hands.HandLandmark.THUMB_TIP]
+
+                    index_finger_tip_x, index_finger_tip_y = int(index_finger_tip.x * frame.shape[1]), int(index_finger_tip.y * frame.shape[0])
+                    thumb_tip_x, thumb_tip_y = int(thumb_tip.x * frame.shape[1]), int(thumb_tip.y * frame.shape[0])
+
+                    cv2.rectangle(image, (index_finger_tip_x - 10, index_finger_tip_y - 10), (index_finger_tip_x + 10, index_finger_tip_y + 10), (0, 255, 0), 2)
+                    cv2.rectangle(image, (thumb_tip_x - 10, thumb_tip_y - 10), (thumb_tip_x + 10, thumb_tip_y + 10), (0, 255, 0), 2)
                     cv2.putText(image, 'VOCE FEZ O L', (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2, cv2.LINE_AA)
 
         cv2.imshow('Detector De L', image)
